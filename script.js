@@ -33,41 +33,61 @@ function createContentCard(item) {
 // Load movies
 function loadMovies() {
     const moviesGrid = document.getElementById('moviesGrid');
-    moviesGrid.innerHTML = moviesData.map(createContentCard).join('');
+    if (moviesGrid) {
+        moviesGrid.innerHTML = moviesData.map(createContentCard).join('');
+    }
 }
 
 // Load series
 function loadSeries() {
     const seriesGrid = document.getElementById('seriesGrid');
-    seriesGrid.innerHTML = seriesData.map(createContentCard).join('');
+    if (seriesGrid) {
+        seriesGrid.innerHTML = seriesData.map(createContentCard).join('');
+    }
 }
 
 // Mobile menu toggle
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinks');
-    navLinks.classList.toggle('active');
+    if (navLinks) {
+        navLinks.classList.toggle('active');
+    }
 }
 
 // Close menu when link is clicked
 function closeMenu() {
     const navLinks = document.getElementById('navLinks');
-    navLinks.classList.remove('active');
+    if (navLinks) {
+        navLinks.classList.remove('active');
+    }
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Load content
     loadMovies();
     loadSeries();
     
-    // Menu toggle
+    // Menu toggle button
     const menuToggle = document.getElementById('menuToggle');
     if (menuToggle) {
         menuToggle.addEventListener('click', toggleMobileMenu);
     }
     
-    // Close menu when clicking on links
-    document.querySelectorAll('#navLinks a').forEach(link => {
-        link.addEventListener('click', closeMenu);
+    // Close menu when clicking on navigation links
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const navbar = document.querySelector('.navbar');
+        if (navbar && !navbar.contains(event.target)) {
+            closeMenu();
+        }
     });
     
     // Add click event to all content cards
@@ -78,23 +98,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Sign In button
-    document.querySelector('.btn-login').addEventListener('click', () => {
-        alert('Sign In feature coming soon!');
-    });
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            alert('Sign In feature coming soon!');
+        });
+    }
     
     // Start Watching button
-    document.querySelector('.btn-primary').addEventListener('click', () => {
-        alert('Start your streaming experience now!');
-    });
+    const watchBtn = document.getElementById('watchBtn');
+    if (watchBtn) {
+        watchBtn.addEventListener('click', () => {
+            alert('Start your streaming experience now!');
+        });
+    }
 });
 
-// Smooth scroll for navigation links
+// Smooth scroll for navigation links (handle both old and new anchor links)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                closeMenu();
+            }
         }
     });
 });
