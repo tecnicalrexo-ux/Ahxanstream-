@@ -42,10 +42,33 @@ function loadSeries() {
     seriesGrid.innerHTML = seriesData.map(createContentCard).join('');
 }
 
+// Mobile menu toggle
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.toggle('active');
+}
+
+// Close menu when link is clicked
+function closeMenu() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.remove('active');
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadMovies();
     loadSeries();
+    
+    // Menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMobileMenu);
+    }
+    
+    // Close menu when clicking on links
+    document.querySelectorAll('#navLinks a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
     
     // Add click event to all content cards
     document.querySelectorAll('.content-card').forEach(card => {
